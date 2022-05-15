@@ -13,15 +13,18 @@ class SearchPhotosWebServices {
     List<Photo> searchPhotos = [];
 
     String allSearchPhotosApi =
-        base_api + search_photos_api + "?page=$page&per_page=$limit&query=query&" + client_id;
+        base_api + search_photos_api + "?page=$page&per_page=$limit&query=$query&" + client_id;
 
     http.Response response = await http.get(Uri.parse(allSearchPhotosApi));
 
     //print("statusCode is: ${response.statusCode}");
 
     if (response.statusCode == 200) {
+
       var jsonData = jsonDecode(response.body);
-      for (var item in jsonData) {
+      var data = jsonData['results'];
+
+      for (var item in data) {
         var id = item["id"];
         var url = item["urls"]["small_s3"];
         var download = item["links"]["download"];

@@ -32,7 +32,6 @@ class MyApp extends StatelessWidget {
         create: (BuildContext context) => PhotoBloc(
           photosRepository: PhotosRepository(
             photosWebServices: PhotosWebServices(),
-            searchPhotosWebServices: SearchPhotosWebServices(),
           ),
         )..add(PhotoFetched()),
         child: OfflineBuilder(
@@ -43,7 +42,7 @@ class MyApp extends StatelessWidget {
           ) {
             final bool connected = connectivity != ConnectivityResult.none;
             if (connected) {
-              return const HomeScreen();
+              return HomeScreen();
             } else {
               return const NoConnectionWidget();
             }

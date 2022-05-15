@@ -10,8 +10,8 @@ class PhotosRepository {
 
   PhotosRepository({this.photosWebServices , this.searchPhotosWebServices});
 
-  Future<List<Photo>> fetchAllPhotos({required int page , required int limit , required String query}) async {
-    if(query == ''){
+  Future<List<Photo>> fetchAllPhotos({required int page , required int limit , String? query}) async {
+    if(query == null){
       return await photosWebServices!.fetchAllPhotos(page: page ,limit: limit);
     }
     else {
