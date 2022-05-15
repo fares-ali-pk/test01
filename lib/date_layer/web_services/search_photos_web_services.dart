@@ -1,19 +1,21 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:test01/date_layer/models/photo.dart';
 import 'package:test01/utilities/api_utilities.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-class PhotosWebServices {
-  Future<List<Photo>> fetchAllPhotos({
+class SearchPhotosWebServices {
+  Future<List<Photo>> fetchSearchPhotos({
     required int page,
     required int limit,
+    required String query,
   }) async {
-    List<Photo> photos = [];
 
-    String allPhotosApi =
-        base_api + get_photos_api + "?page=$page&per_page=$limit&" + client_id;
+    List<Photo> searchPhotos = [];
 
-    http.Response response = await http.get(Uri.parse(allPhotosApi));
+    String allSearchPhotosApi =
+        base_api + search_photos_api + "?page=$page&per_page=$limit&query=query&" + client_id;
+
+    http.Response response = await http.get(Uri.parse(allSearchPhotosApi));
 
     //print("statusCode is: ${response.statusCode}");
 
@@ -29,9 +31,9 @@ class PhotosWebServices {
           smallS3: (url == null) ? "assets/images/noImage.png" : url.toString(),
           download: (download == null) ? "no url" : download.toString(),
         );
-        photos.add(photo);
+        searchPhotos.add(photo);
       }
     }
-    return photos;
+    return searchPhotos;
   }
 }

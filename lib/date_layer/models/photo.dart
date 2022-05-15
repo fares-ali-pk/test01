@@ -1,12 +1,12 @@
 class Photo {
   String? id;
   String smallS3;
-  String? download;
+  String download;
 
   bool isFavourite;
   bool isDownload;
 
-  Photo({this.id, required this.smallS3, this.download , this.isFavourite =false ,this.isDownload = false});
+  Photo({this.id, required this.smallS3, required this.download , this.isFavourite =false ,this.isDownload = false});
 
 
   void toggleFavoriteStatus(){

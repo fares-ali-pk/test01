@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test01/utilities/my_colors.dart';
 
 Widget loading() {
   return const Center(
@@ -10,7 +11,7 @@ Widget loading() {
       child: SizedBox(
         width: 24,
         height: 24,
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(color: MyColor.myPink,),
       ),
     ),
   );

@@ -11,39 +11,77 @@ part 'photo_event.dart';
 part 'photo_state.dart';
 
 class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
-
   final PhotosRepository photosRepository;
 
   int page = 1;
   int limit;
+  String query = '';
 
-  PhotoBloc({required this.photosRepository, this.limit = 10})
+  PhotoBloc(
+      {required this.photosRepository, this.limit = 10,})
       : super(PhotoState()) {
     on<PhotoFetched>(_onPhotoFetched);
+    //on<SearchPhotoFetched>(_onSearchPhotoFetched);
   }
 
-
-  FutureOr<void> _onPhotoFetched(PhotoFetched event,
-      Emitter<PhotoState> emit) async {
+  FutureOr<void> _onPhotoFetched(
+      PhotoFetched event, Emitter<PhotoState> emit) async {
     if (state.hasReachedMax) return;
 
     try {
       if (state.status == PhotoStatus.initial) {
         final photos = await photosRepository.fetchAllPhotos(
-            page: page, limit: limit);
+          page: page,
+          limit: limit,
+          query: query,
+        );
         return emit(state.copyWith(
-            status: PhotoStatus.success, photos: photos, hasReachedMax: false));
+          status: PhotoStatus.success,
+          photos: photos,
+          hasReachedMax: false,
+          query: query,
+        ));
       }
-      page += 1;
-      final photos = await photosRepository.fetchAllPhotos(page: page, limit: limit);
 
-      photos.isEmpty ? emit(state.copyWith(hasReachedMax: true)) : emit(
-          state.copyWith(
-            status: PhotoStatus.success, photos: List.of(state.photos)
-            ..addAll(photos), hasReachedMax: false,));
-    } catch (_){
+      page += 1;
+      final photos = await photosRepository.fetchAllPhotos(
+        page: page,
+        limit: limit,
+        query: query,
+      );
+      photos.isEmpty
+          ? emit(state.copyWith(hasReachedMax: true))
+          : emit(state.copyWith(
+              status: PhotoStatus.success,
+              photos: List.of(state.photos)..addAll(photos),
+              hasReachedMax: false,
+              query: query,
+            ));
+    } catch (_) {
       emit(state.copyWith(status: PhotoStatus.failure));
     }
-
   }
+
+// FutureOr<void> _onSearchPhotoFetched(SearchPhotoFetched event, Emitter<PhotoState> emit) async {
+//
+//   if (state.hasReachedMax) return;
+//
+//   try {
+//     if (state.status == PhotoStatus.initial) {
+//       final photos = await photosRepository.fetchAllPhotos(
+//           page: page, limit: limit);
+//       return emit(state.copyWith(
+//           status: PhotoStatus.success, photos: photos, hasReachedMax: false));
+//     }
+//
+//     page += 1;
+//     final photos = await photosRepository.fetchAllPhotos(page: page, limit: limit);
+//     photos.isEmpty ? emit(state.copyWith(hasReachedMax: true)) : emit(
+//         state.copyWith(
+//           status: PhotoStatus.success, photos: List.of(state.photos)
+//           ..addAll(photos), hasReachedMax: false,));
+//   } catch (_){
+//     emit(state.copyWith(status: PhotoStatus.failure));
+//   }
+// }
 }

@@ -1,13 +1,22 @@
 import 'package:test01/date_layer/models/photo.dart';
 import 'package:test01/date_layer/web_services/photos_web_services.dart';
+import 'package:test01/date_layer/web_services/search_photos_web_services.dart';
 
 class PhotosRepository {
 
-  late final PhotosWebServices _photosWebServices;
+  final PhotosWebServices? photosWebServices;
+  final SearchPhotosWebServices? searchPhotosWebServices;
 
 
-  PhotosRepository(this._photosWebServices);
+  PhotosRepository({this.photosWebServices , this.searchPhotosWebServices});
 
-  Future<List<Photo>> fetchAllPhotos({required int page , required int limit}) async =>
-      await _photosWebServices.fetchAllPhotos(page: page ,limit: limit);
+  Future<List<Photo>> fetchAllPhotos({required int page , required int limit , required String query}) async {
+    if(query == ''){
+      return await photosWebServices!.fetchAllPhotos(page: page ,limit: limit);
+    }
+    else {
+      return await searchPhotosWebServices!.fetchSearchPhotos(page: page, limit: limit, query: query);
+    }
+  }
+
 }
